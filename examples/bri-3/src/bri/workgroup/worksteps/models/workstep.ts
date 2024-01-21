@@ -22,6 +22,9 @@ export class Workstep {
   @AutoMap()
   privacyPolicy: string; // TODO Implement simple privacy policy inhereted from workgroup #487
 
+  @AutoMap()
+  circuitInputsTranslationSchema: string;
+
   constructor(
     id: string,
     name: string,
@@ -62,5 +65,9 @@ export class Workstep {
 
   public updatePrivacyPolicy(newPrivacyPolicy: string): void {
     this.privacyPolicy = newPrivacyPolicy;
+  }
+
+  public updateCircuitInputTranslationSchema(schema): void {
+    this.circuitInputsTranslationSchema = schema;
   }
 }
