@@ -21,6 +21,11 @@ import { SnarkjsCircuitService } from './services/circuit/snarkjs/snarkjs.servic
       useClass: EthereumService,
     },
   ],
-  exports: ['ICircuitService', 'IBlockchainService', CcsmStorageAgent, CircuitInputsParserService],
+  exports: [
+    'ICircuitService',
+    'IBlockchainService',
+    CcsmStorageAgent,
+    CircuitInputsParserService,
+  ],
 })
 export class ZeroKnowledgeProofModule {}

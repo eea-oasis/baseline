@@ -23,9 +23,7 @@ export class SetCircuitInputsSchemaCommandHandler
         command.workstepId,
       );
 
-    this.agent.throwIfCircuitInputTranslationSchemaInvalid(
-      command.schema
-    );
+    this.agent.throwIfCircuitInputTranslationSchemaInvalid(command.schema);
 
     this.agent.updateCircuitInputTranslationSchema(
       workstepToUpdate,

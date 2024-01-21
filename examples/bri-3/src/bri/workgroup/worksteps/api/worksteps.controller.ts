@@ -80,10 +80,7 @@ export class WorkstepController {
     @Body() requestDto: SetCircuitInputsSchemaDto,
   ): Promise<WorkstepDto> {
     return await this.commandBus.execute(
-      new SetCircuitInputsSchemaCommand(
-        id,
-        requestDto.schema,
-      ),
+      new SetCircuitInputsSchemaCommand(id, requestDto.schema),
     );
   }
 

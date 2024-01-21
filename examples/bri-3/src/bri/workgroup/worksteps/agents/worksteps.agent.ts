@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Workstep } from '../models/workstep';
 
 import { v4 } from 'uuid';
@@ -8,7 +12,10 @@ import { WorkstepStorageAgent } from './workstepsStorage.agent';
 
 @Injectable()
 export class WorkstepAgent {
-  constructor(private storageAgent: WorkstepStorageAgent, private cips: CircuitInputsParserService) {}
+  constructor(
+    private storageAgent: WorkstepStorageAgent,
+    private cips: CircuitInputsParserService,
+  ) {}
 
   public createNewWorkstep(
     name: string,
@@ -60,13 +67,13 @@ export class WorkstepAgent {
 
   public throwIfCircuitInputTranslationSchemaInvalid(schema): void {
     if (!this.cips.validateCircuitInputTranslationSchema(schema)) {
-      throw new BadRequestException("TODO: Exact error");
+      throw new BadRequestException('TODO: Exact error');
     }
   }
 
   public updateCircuitInputTranslationSchema(
     workstepToUpdate: Workstep,
-    schema: string
+    schema: string,
   ): void {
     workstepToUpdate.updateCircuitInputTranslationSchema(schema);
   }

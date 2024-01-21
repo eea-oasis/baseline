@@ -18,7 +18,7 @@ export const CommandHandlers = [
   CreateWorkstepCommandHandler,
   UpdateWorkstepCommandHandler,
   DeleteWorkstepCommandHandler,
-  SetCircuitInputsSchemaCommandHandler
+  SetCircuitInputsSchemaCommandHandler,
 ];
 
 export const QueryHandlers = [

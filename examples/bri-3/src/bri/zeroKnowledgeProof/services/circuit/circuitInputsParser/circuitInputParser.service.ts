@@ -36,7 +36,9 @@ export class CircuitInputsParserService {
 
         switch (mapping.dataType) {
           case 'string':
-            result[mapping.circuitInput] = this.calculateStringCharCodeSum(value || mapping.defaultValue);
+            result[mapping.circuitInput] = this.calculateStringCharCodeSum(
+              value || mapping.defaultValue,
+            );
             break;
 
           case 'integer':

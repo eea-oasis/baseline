@@ -7,7 +7,10 @@ describe('SetCircuitInputsSchemaDto', () => {
   it('should return error in case schema not provided.', async () => {
     // Arrange
     const dto = { wrong: '1' };
-    const setCircuitInputsSchemaDto = plainToInstance(SetCircuitInputsSchemaDto, dto);
+    const setCircuitInputsSchemaDto = plainToInstance(
+      SetCircuitInputsSchemaDto,
+      dto,
+    );
 
     // Act
     const errors = await validate(setCircuitInputsSchemaDto);
@@ -23,7 +26,10 @@ describe('SetCircuitInputsSchemaDto', () => {
   it('should return no error if all required properties provided.', async () => {
     // Arrange
     const dto = { schema: 'test' };
-    const setCircuitInputsSchemaDto = plainToInstance(SetCircuitInputsSchemaDto, dto);
+    const setCircuitInputsSchemaDto = plainToInstance(
+      SetCircuitInputsSchemaDto,
+      dto,
+    );
 
     // Act
     const errors = await validate(setCircuitInputsSchemaDto);
