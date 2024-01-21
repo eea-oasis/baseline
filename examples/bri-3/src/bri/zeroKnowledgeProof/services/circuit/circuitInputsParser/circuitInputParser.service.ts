@@ -5,6 +5,16 @@ import { LoggingService } from '../../../../../shared/logging/logging.service';
 export class CircuitInputsParserService {
   constructor(private readonly logger: LoggingService) {}
 
+  public validateCircuitInputTranslationSchema(schema: string): boolean {
+    try {
+      const parsedData: CircuitInputsMapping = JSON.parse(schema);
+      // TODO: Expand
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   public applyMappingToJSONPayload(payload: string, cim: CircuitInputsMapping) {
     const result: any = {};
 
