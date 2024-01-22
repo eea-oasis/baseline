@@ -66,8 +66,10 @@ export class WorkstepAgent {
   }
 
   public throwIfCircuitInputTranslationSchemaInvalid(schema): void {
-    if (!this.cips.validateCircuitInputTranslationSchema(schema)) {
-      throw new BadRequestException('TODO: Exact error');
+    const [result, error] =
+      this.cips.validateCircuitInputTranslationSchema(schema);
+    if (!result) {
+      throw new BadRequestException(error);
     }
   }
 
