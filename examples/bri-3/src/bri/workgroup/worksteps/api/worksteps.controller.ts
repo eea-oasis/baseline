@@ -9,11 +9,13 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CheckAuthz } from '../../../authz/guards/authz.decorator';
+import { SetCircuitInputsSchemaCommand } from '../capabilities/setCircuitInputsSchema/setCircuitInputsSchema.command';
 import { CreateWorkstepCommand } from '../capabilities/createWorkstep/createWorkstep.command';
 import { DeleteWorkstepCommand } from '../capabilities/deleteWorkstep/deleteWorkstep.command';
 import { GetAllWorkstepsQuery } from '../capabilities/getAllWorksteps/getAllWorksteps.query';
 import { GetWorkstepByIdQuery } from '../capabilities/getWorkstepById/getWorkstepById.query';
 import { UpdateWorkstepCommand } from '../capabilities/updateWorkstep/updateWorkstep.command';
+import { SetCircuitInputsSchemaDto } from './dtos/request/setCircuitInputsSchema.dto';
 import { CreateWorkstepDto } from './dtos/request/createWorkstep.dto';
 import { UpdateWorkstepDto } from './dtos/request/updateWorkstep.dto';
 import { WorkstepDto } from './dtos/response/workstep.dto';
@@ -68,6 +70,17 @@ export class WorkstepController {
         requestDto.securityPolicy,
         requestDto.privacyPolicy,
       ),
+    );
+  }
+
+  @Put('/:id/circuitinputsschema')
+  @CheckAuthz({ action: 'update', type: 'Workstep' })
+  async setCircuitInputsSchemaCommand(
+    @Param('id') id: string,
+    @Body() requestDto: SetCircuitInputsSchemaDto,
+  ): Promise<WorkstepDto> {
+    return await this.commandBus.execute(
+      new SetCircuitInputsSchemaCommand(id, requestDto.schema),
     );
   }
 

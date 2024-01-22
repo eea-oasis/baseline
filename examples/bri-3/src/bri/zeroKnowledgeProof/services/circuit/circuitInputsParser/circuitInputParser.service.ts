@@ -5,6 +5,59 @@ import { LoggingService } from '../../../../../shared/logging/logging.service';
 export class CircuitInputsParserService {
   constructor(private readonly logger: LoggingService) {}
 
+  public validateCircuitInputTranslationSchema(
+    schema: string,
+  ): [boolean, string] {
+    try {
+      const parsedData: CircuitInputsMapping = JSON.parse(schema);
+
+      if (!parsedData.mapping || !Array.isArray(parsedData.mapping)) {
+        return [false, `Missing mapping array`];
+      }
+
+      for (const mapping of parsedData.mapping) {
+        if (typeof mapping.circuitInput !== 'string') {
+          return [false, `${mapping.circuitInput} not of type string`];
+        }
+
+        if (typeof mapping.description !== 'string') {
+          return [false, `${mapping.description} not of type string`];
+        }
+
+        if (typeof mapping.payloadJsonPath !== 'string') {
+          return [false, `${mapping.payloadJsonPath} not of type string`];
+        }
+
+        if (typeof mapping.dataType !== 'string') {
+          return [false, `${mapping.dataType} not of type string`];
+        }
+
+        if (mapping.dataType === 'array') {
+          if (!mapping.arrayType || typeof mapping.arrayType !== 'string') {
+            return [
+              false,
+              `arrayType not defined properly for ${mapping.circuitInput}`,
+            ];
+          }
+        }
+
+        if (
+          mapping.defaultValue &&
+          typeof mapping.defaultValue !== mapping.dataType
+        ) {
+          return [
+            false,
+            `defaultValue not of type ${mapping.dataType} for ${mapping.circuitInput}`,
+          ];
+        }
+      }
+
+      return [true, ''];
+    } catch (error) {
+      return [false, error.message];
+    }
+  }
+
   public applyMappingToJSONPayload(payload: string, cim: CircuitInputsMapping) {
     const result: any = {};
 
@@ -26,7 +79,9 @@ export class CircuitInputsParserService {
 
         switch (mapping.dataType) {
           case 'string':
-            result[mapping.circuitInput] = this.calculateStringCharCodeSum(value || mapping.defaultValue);
+            result[mapping.circuitInput] = this.calculateStringCharCodeSum(
+              value || mapping.defaultValue,
+            );
             break;
 
           case 'integer':

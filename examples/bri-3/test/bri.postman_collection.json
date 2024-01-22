@@ -1,10 +1,8 @@
 {
 	"info": {
-		"_postman_id": "ba45f484-70a4-4516-825f-e9747aeaaabe",
-		"name": "bri Copy",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11201020",
-		"_collection_link": "https://speeding-moon-127141.postman.co/workspace/Baseline~2b0609f4-7b8a-4f42-a245-7e537015edbc/collection/11201020-ba45f484-70a4-4516-825f-e9747aeaaabe?action=share&creator=11201020&source=collection_link"
+		"_postman_id": "23da0214-5606-4a7b-a410-297ae21c0d76",
+		"name": "bri",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -438,6 +436,36 @@
 							"response": []
 						},
 						{
+							"name": "Set Circut Inputs Translation SchemaCopy",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"schemas\": \"olleh2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/worksteps/19854519-fe4b-45fc-843b-39b0446d556e/circuitinputsschema",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"worksteps",
+										"19854519-fe4b-45fc-843b-39b0446d556e",
+										"circuitinputsschema"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create Workstep",
 							"request": {
 								"method": "POST",
@@ -742,7 +770,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"hello1\",\n    \"administratorIds\": [\"2a74c458-8cf7-4209-8e54-82fa064efe25\"],\n    \"securityPolicy\": \"sec1\",\n    \"privacyPolicy\": \"priv1\",\n    \"participantIds\": [\"2a74c458-8cf7-4209-8e54-82fa064efe25\", \"92747004-9ff6-47ea-abf9-7dfaebd36d51\"],\n    \"worksteps\": [],\n    \"workflows\": []\n}",
+									"raw": "{\n    \"name\": \"Test workgroup\",\n    \"securityPolicy\": \"sec1\",\n    \"privacyPolicy\": \"priv1\",\n    \"worksteps\": [],\n    \"workflows\": []\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1103,7 +1131,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"publicKey\": \"sig\"\n}",
+							"raw": "{\n    \"publicKey\": \"0x08872e27BC5d78F1FC4590803369492868A1FCCb\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1132,7 +1160,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"message\": \"msg\",\n    \"signature\": \"sig\",\n    \"publicKey\": \"pk\"\n}",
+							"raw": "{\n    \"message\": \"d21107d6-3806-4fec-8371-90e16ef6afad\",\n    \"signature\": \"40e6294f76746ed7bb323df99fce0a2be7b1ea7595dc808eeac2d295ce1d5b45240e2726daa4b468c3e5a9e82ebcd2677bdd1b5f3ed11c307db4fe4fd71a6c1a1b\",\n    \"publicKey\": \"0x08872e27BC5d78F1FC4590803369492868A1FCCb\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1149,100 +1177,6 @@
 							"path": [
 								"auth",
 								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Merkle Tree",
-			"item": [
-				{
-					"name": "Create Merkle Tree",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"leaves\": [\"a\", \"b\", \"c\"],\n    \"hashFunction\": \"sha256\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/merkle",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"merkle"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Merkle Tree By Id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/merkle/7c2a351a-fd43-468c-a75d-64a0d1b54b8a",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"merkle",
-								"7c2a351a-fd43-468c-a75d-64a0d1b54b8a"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Merkle Tree",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/merkle/d5262706-bb63-4681-ba3e-9bba41960c1a",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"merkle",
-								"d5262706-bb63-4681-ba3e-9bba41960c1a"
 							]
 						}
 					},

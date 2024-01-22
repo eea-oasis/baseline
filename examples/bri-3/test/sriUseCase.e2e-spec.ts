@@ -104,6 +104,12 @@ describe('SRI use-case end-to-end test', () => {
     );
   });
 
+  it('Add a circuit input translation schema to a workstep', async () => {
+    const schema =
+      '{"mapping": [{"circuitInput": "input1", "description": "desc1", "payloadJsonPath": "path1", "dataType": "string"}]}';
+    await addCircuitInputsSchema(createdWorkstepId, schema);
+  });
+
   it('Submits a transaction for execution of the workstep 1', async () => {
     // TODO: CheckAuthz on createTransaction and in other places
     // TODO: Faking two items in the payload as the circuit is hardcoded to 4
@@ -264,6 +270,21 @@ async function createWorkstepAndReturnId(
     .expect(201);
 
   return createdWorkstepResponse.text;
+}
+
+async function addCircuitInputsSchema(
+  workstepId: string,
+  schema: string,
+): Promise<string> {
+  const addCircuitInputsSchemaResponse = await request(server)
+    .put(`/worksteps/${workstepId}/circuitinputsschema`)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .send({
+      schema: schema,
+    })
+    .expect(200);
+
+  return addCircuitInputsSchemaResponse.text;
 }
 
 async function createWorkflowAndReturnId(
