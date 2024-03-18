@@ -15,6 +15,7 @@ import {
   Workstep,
   BpiAccount,
   PrismaClient,
+  PublicKeyType,
 } from '../../../../__mocks__/@prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SnarkjsCircuitService } from '../../zeroKnowledgeProof/services/circuit/snarkjs/snarkjs.service';
@@ -76,18 +77,48 @@ beforeEach(async () => {
     data: {
       name: 'name',
       description: 'desc',
-      publicKey:
-        '0x047a197a795a747c154dd92b217a048d315ef9ca1bfa9c15bfefe4e02fb338a70af23e7683b565a8dece5104a85ed24a50d791d8c5cb09ee21aabc927c98516539',
     },
+  });
+
+  await prisma.publicKey.createMany({
+    data: [
+      {
+        type: PublicKeyType.ECDSA,
+        value:
+          '0x047a197a795a747c154dd92b217a048d315ef9ca1bfa9c15bfefe4e02fb338a70af23e7683b565a8dece5104a85ed24a50d791d8c5cb09ee21aabc927c98516539',
+        bpiSubjectId: bpiSubject1.id,
+      },
+      {
+        type: PublicKeyType.EDDSA,
+        value:
+          '0x047a197a795a747c154dd92b217a048d315ef9ca1bfa9c15bfefe4e02fb338a70af23e7683b565a8dece5104a85ed24a50d791d8c5cb09ee21aabc927c98516539',
+        bpiSubjectId: bpiSubject1.id,
+      },
+    ],
   });
 
   bpiSubject2 = await prisma.bpiSubject.create({
     data: {
       name: 'name2',
       description: 'desc2',
-      publicKey:
-        '0x04203db7d27bab8d711acc52479efcfa9d7846e4e176d82389689f95cf06a51818b0b9ab1c2c8d72f1a32e236e6296c91c922a0dc3d0cb9afc269834fc5646b980',
     },
+  });
+
+  await prisma.publicKey.createMany({
+    data: [
+      {
+        type: PublicKeyType.ECDSA,
+        value:
+          '0x04203db7d27bab8d711acc52479efcfa9d7846e4e176d82389689f95cf06a51818b0b9ab1c2c8d72f1a32e236e6296c91c922a0dc3d0cb9afc269834fc5646b980',
+        bpiSubjectId: bpiSubject2.id,
+      },
+      {
+        type: PublicKeyType.EDDSA,
+        value:
+          '0x04203db7d27bab8d711acc52479efcfa9d7846e4e176d82389689f95cf06a51818b0b9ab1c2c8d72f1a32e236e6296c91c922a0dc3d0cb9afc269834fc5646b980',
+        bpiSubjectId: bpiSubject2.id,
+      },
+    ],
   });
 
   bpiSubjectAccount1 = await prisma.bpiSubjectAccount.create({
@@ -246,8 +277,8 @@ describe('Transaction Agent', () => {
   it('Should return false when validateTransactionForExecution invoked with tx with wrong signature', async () => {
     // Arrange
     jest
-      .spyOn(authAgent, 'verifySignatureAgainstPublicKey')
-      .mockImplementationOnce(() => false);
+      .spyOn(authAgent, 'verifyEddsaSignatureAgainstPublicKey')
+      .mockImplementationOnce(async () => false);
     const tx = new Transaction(
       '1',
       1,
@@ -270,8 +301,8 @@ describe('Transaction Agent', () => {
   it('Should return false when validateTransactionForExecution invoked with tx with status not processing', async () => {
     // Arrange
     jest
-      .spyOn(authAgent, 'verifySignatureAgainstPublicKey')
-      .mockImplementationOnce(() => true);
+      .spyOn(authAgent, 'verifyEddsaSignatureAgainstPublicKey')
+      .mockImplementationOnce(async () => true);
     const tx = new Transaction(
       '1',
       1,
@@ -294,8 +325,8 @@ describe('Transaction Agent', () => {
   it('Should return false when validateTransactionForExecution invoked with tx with nonce not bpi account nonce + 1', async () => {
     // Arrange
     jest
-      .spyOn(authAgent, 'verifySignatureAgainstPublicKey')
-      .mockImplementationOnce(() => true);
+      .spyOn(authAgent, 'verifyEddsaSignatureAgainstPublicKey')
+      .mockImplementationOnce(async () => true);
     const tx = new Transaction(
       '1',
       2,
@@ -318,8 +349,8 @@ describe('Transaction Agent', () => {
   it('Should return true when validateTransactionForExecution invoked with tx with all properties correctly set', async () => {
     // Arrange
     jest
-      .spyOn(authAgent, 'verifySignatureAgainstPublicKey')
-      .mockImplementationOnce(() => true);
+      .spyOn(authAgent, 'verifyEddsaSignatureAgainstPublicKey')
+      .mockImplementationOnce(async () => true);
     const tx = new Transaction(
       '1',
       1,

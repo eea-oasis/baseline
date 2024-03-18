@@ -4,6 +4,7 @@ import { AuthAgent } from '../../../auth/agent/auth.agent';
 import { TransactionAgent } from '../../agents/transactions.agent';
 import { TransactionStorageAgent } from '../../agents/transactionStorage.agent';
 import { ProcessInboundBpiTransactionCommand } from './processInboundTransaction.command';
+import { PublicKeyType } from '../../../identity/bpiSubjects/models/publicKey';
 
 // Difference between this and the create bpi transaction command handler is that this one does not
 // stop the execution flow by throwing a nestjs exception (which results in 404 response in the other handler)
@@ -34,11 +35,14 @@ export class ProcessInboundTransactionCommandHandler
       return false;
     }
 
-    const isSignatureValid = this.authAgent.verifySignatureAgainstPublicKey(
-      command.payload,
-      command.signature,
-      subjectAccounts[0].ownerBpiSubject.publicKey,
-    );
+    const isSignatureValid =
+      this.authAgent.verifyEddsaSignatureAgainstPublicKey(
+        command.payload,
+        command.signature,
+        subjectAccounts[0].ownerBpiSubject.publicKeys.filter(
+          (key) => key.type == PublicKeyType.EDDSA,
+        )[0].value,
+      );
 
     if (!isSignatureValid) {
       return false;

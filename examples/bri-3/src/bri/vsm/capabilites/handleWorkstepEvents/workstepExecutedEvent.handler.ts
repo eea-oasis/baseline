@@ -5,6 +5,7 @@ import { LoggingService } from '../../../../shared/logging/logging.service';
 import { BpiMessage } from '../../../communication/models/bpiMessage';
 import { BpiMessageType } from '../../../communication/models/bpiMessageType.enum';
 import { MessagingAgent } from '../../../communication/agents/messaging.agent';
+import { PublicKeyType } from '../../../identity/bpiSubjects/models/publicKey';
 
 @EventsHandler(WorkstepExecutedEvent)
 export class WorkstepExecutedEventHandler
@@ -42,11 +43,16 @@ export class WorkstepExecutedEventHandler
       messageType,
     );
 
+    const publicKey =
+      event.tx.toBpiSubjectAccount.ownerBpiSubject.publicKeys.filter(
+        (key) => key.type == PublicKeyType.ECDSA,
+      )[0].value;
+
     // Change channels to publish message here
-    const channels = [event.tx.fromBpiSubjectAccount.ownerBpiSubject.publicKey];
+    const channels = [publicKey];
 
     if (event.status == 'Success') {
-      channels.push(event.tx.toBpiSubjectAccount.ownerBpiSubject.publicKey);
+      channels.push(publicKey);
     }
 
     await this.publishMessage(channels, bpiMessage);

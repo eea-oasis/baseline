@@ -29,14 +29,14 @@ describe('SubjectController', () => {
     uuid(),
     'name',
     'description',
-    'pk',
+    [],
     [],
   );
   const existingBpiSubject2 = new BpiSubject(
     uuid(),
     'name2',
     'description2',
-    'pk2',
+    [],
     [],
   );
 
@@ -100,8 +100,8 @@ describe('SubjectController', () => {
       expect(fetchedBpiSubject.description).toEqual(
         existingBpiSubject1.description,
       );
-      expect(fetchedBpiSubject.publicKey).toEqual(
-        existingBpiSubject1.publicKey,
+      expect(fetchedBpiSubject.publicKeys).toEqual(
+        existingBpiSubject1.publicKeys,
       );
     });
   });
@@ -135,13 +135,13 @@ describe('SubjectController', () => {
       expect(bpiSubjects[0].description).toEqual(
         existingBpiSubject1.description,
       );
-      expect(bpiSubjects[0].publicKey).toEqual(existingBpiSubject1.publicKey);
+      expect(bpiSubjects[0].publicKeys).toEqual(existingBpiSubject1.publicKeys);
       expect(bpiSubjects[1].id).toEqual(existingBpiSubject2.id);
       expect(bpiSubjects[1].name).toEqual(existingBpiSubject2.name);
       expect(bpiSubjects[1].description).toEqual(
         existingBpiSubject2.description,
       );
-      expect(bpiSubjects[1].publicKey).toEqual(existingBpiSubject2.publicKey);
+      expect(bpiSubjects[1].publicKeys).toEqual(existingBpiSubject2.publicKeys);
     });
   });
 
@@ -149,8 +149,12 @@ describe('SubjectController', () => {
     it('should throw BadRequest if name not provided', () => {
       // Arrange
       const requestDto = {
+        name: 'BpiSubject',
         desc: 'desc',
-        publicKey: 'publicKey',
+        publicKeys: [
+          { type: 'ecdsa', value: 'ecdsaPk' },
+          { type: 'ecdsa', value: 'ecdsaPk' },
+        ],
       } as CreateBpiSubjectDto;
 
       // Act and assert
@@ -164,7 +168,10 @@ describe('SubjectController', () => {
       const requestDto = {
         name: 'name',
         desc: 'desc',
-        publicKey: 'publicKey',
+        publicKeys: [
+          { type: 'ecdsa', value: 'ecdsaPk' },
+          { type: 'ecdsa', value: 'ecdsaPk' },
+        ],
       } as CreateBpiSubjectDto;
       subjectStorageAgentMock.storeNewBpiSubject.mockResolvedValueOnce(
         existingBpiSubject1,
@@ -186,7 +193,10 @@ describe('SubjectController', () => {
       const requestDto = {
         name: 'name',
         desc: 'desc',
-        publicKey: 'publicKey',
+        publicKeys: [
+          { type: 'ecdsa', value: 'ecdsaPk' },
+          { type: 'ecdsa', value: 'ecdsaPk' },
+        ],
       } as UpdateBpiSubjectDto;
 
       // Act and assert
@@ -203,13 +213,16 @@ describe('SubjectController', () => {
       const updateRequestDto = {
         name: 'name2',
         desc: 'desc2',
-        publicKey: 'publicKey2',
+        publicKeys: [
+          { type: 'ecdsa', value: 'ecdsaPk' },
+          { type: 'ecdsa', value: 'ecdsaPk' },
+        ],
       } as UpdateBpiSubjectDto;
       subjectStorageAgentMock.updateBpiSubject.mockResolvedValueOnce({
         ...existingBpiSubject1,
         name: updateRequestDto.name,
         description: updateRequestDto.desc,
-        publicKey: updateRequestDto.publicKey,
+        publicKeys: updateRequestDto.publicKeys,
       } as BpiSubject);
 
       // Act
@@ -222,7 +235,7 @@ describe('SubjectController', () => {
       expect(updatedBpiSubject.id).toEqual(existingBpiSubject1.id);
       expect(updatedBpiSubject.name).toEqual(updateRequestDto.name);
       expect(updatedBpiSubject.description).toEqual(updateRequestDto.desc);
-      expect(updatedBpiSubject.publicKey).toEqual(updateRequestDto.publicKey);
+      expect(updatedBpiSubject.publicKeys).toEqual(updateRequestDto.publicKeys);
     });
   });
 

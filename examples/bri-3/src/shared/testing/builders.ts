@@ -4,6 +4,7 @@ import { BpiAccount } from '../../bri/state/bpiAccounts/models/bpiAccount';
 import { BpiSubjectAccount } from '../../bri/identity/bpiSubjectAccounts/models/bpiSubjectAccount';
 import { BpiSubject } from '../../bri/identity/bpiSubjects/models/bpiSubject';
 import { BpiSubjectRole } from '../../bri/identity/bpiSubjects/models/bpiSubjectRole';
+import { PublicKey } from '../../bri/identity/bpiSubjects/models/publicKey';
 import { BpiMerkleTree } from '../../bri/merkleTree/models/bpiMerkleTree';
 import { Workflow } from '../../bri/workgroup/workflows/models/workflow';
 import { Workgroup } from '../../bri/workgroup/workgroups/models/workgroup';
@@ -121,7 +122,7 @@ export class BpiSubjectBuilder {
   private id: string;
   private name: string;
   private description: string;
-  private publicKey: string;
+  private publicKeys: PublicKey[];
   private loginNonce: string;
   private roles: BpiSubjectRole[];
 
@@ -142,8 +143,8 @@ export class BpiSubjectBuilder {
     return this;
   }
 
-  setPublicKey(publicKey: string): BpiSubjectBuilder {
-    this.publicKey = publicKey;
+  setPublicKey(publicKeys: PublicKey[]): BpiSubjectBuilder {
+    this.publicKeys = publicKeys;
     return this;
   }
 
@@ -162,7 +163,7 @@ export class BpiSubjectBuilder {
       this.id,
       this.name,
       this.description,
-      this.publicKey,
+      this.publicKeys,
       this.roles,
     );
   }

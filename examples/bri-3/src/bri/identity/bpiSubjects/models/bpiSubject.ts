@@ -43,10 +43,13 @@ export class BpiSubject {
     this.description = newDescription;
   }
 
-  public updatePublicKey(newPk: PublicKey): void {
-    this.publicKeys = this.publicKeys.map((key) =>
-      key.type == newPk.type ? (key = newPk) : key,
-    );
+  public updatePublicKeys(newPKs: PublicKey[]): void {
+    newPKs.map((newKey: PublicKey) => {
+      const index = this.publicKeys.findIndex(
+        (oldKey: PublicKey) => oldKey.type == newKey.type,
+      );
+      this.publicKeys[index] = newKey;
+    });
   }
 
   public updateLoginNonce(): void {

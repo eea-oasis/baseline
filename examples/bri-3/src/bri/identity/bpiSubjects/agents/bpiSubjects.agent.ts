@@ -11,6 +11,7 @@ import {
 } from '../api/err.messages';
 import { BpiSubjectStorageAgent } from './bpiSubjectsStorage.agent';
 import { BpiSubjectRoleName } from '../models/bpiSubjectRole';
+import { PublicKey } from '../models/publicKey';
 
 // Agent methods have extremely declarative names and perform a single task
 @Injectable()
@@ -27,12 +28,11 @@ export class BpiSubjectAgent {
   public async createNewExternalBpiSubject(
     name: string,
     description: string,
-    publicKey: string,
   ): Promise<BpiSubject> {
     const externalRole = await this.storageAgent.getBpiSubjectRoleByName(
       BpiSubjectRoleName.EXTERNAL_BPI_SUBJECT,
     );
-    return new BpiSubject(v4(), name, description, publicKey, [externalRole]);
+    return new BpiSubject(v4(), name, description, [], [externalRole]);
   }
 
   public async fetchUpdateCandidateAndThrowIfUpdateValidationFails(
@@ -64,11 +64,11 @@ export class BpiSubjectAgent {
     bpiSubjectToUpdate: BpiSubject,
     name: string,
     description: string,
-    publicKey: string,
+    publicKeys: PublicKey[],
   ) {
     bpiSubjectToUpdate.updateName(name);
     bpiSubjectToUpdate.updateDescription(description);
-    bpiSubjectToUpdate.updatePublicKey(publicKey);
+    bpiSubjectToUpdate.updatePublicKeys(publicKeys);
   }
 
   public async fetchDeleteCandidateAndThrowIfDeleteValidationFails(

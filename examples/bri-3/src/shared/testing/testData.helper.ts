@@ -6,6 +6,10 @@ import {
   BpiSubjectRole,
   BpiSubjectRoleName,
 } from '../../bri/identity/bpiSubjects/models/bpiSubjectRole';
+import {
+  PublicKey,
+  PublicKeyType,
+} from '../../bri/identity/bpiSubjects/models/publicKey';
 import { Workflow } from '../../bri/workgroup/workflows/models/workflow';
 import { Workstep } from '../../bri/workgroup/worksteps/models/workstep';
 import {
@@ -51,11 +55,15 @@ export class TestDataHelper {
   };
 
   public static createBpiSubject = () => {
+    const bpiSubjectId = uuid();
     const bpiSubject = new BpiSubjectBuilder()
-      .setId(uuid())
+      .setId(bpiSubjectId)
       .setName('name')
       .setDescription('desc')
-      .setPublicKey('pk')
+      .setPublicKey([
+        new PublicKey(uuid(), PublicKeyType.ECDSA, 'ecdsaPk', bpiSubjectId),
+        new PublicKey(uuid(), PublicKeyType.EDDSA, 'eddsaPk', bpiSubjectId),
+      ])
       .setRoles([
         new BpiSubjectRole(
           uuid(),

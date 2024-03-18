@@ -4,6 +4,7 @@ import { BpiMessageAgent } from '../../agents/bpiMessages.agent';
 import { BpiMessageStorageAgent } from '../../agents/bpiMessagesStorage.agent';
 import { MessagingAgent } from '../../agents/messaging.agent';
 import { CreateBpiMessageCommand } from './createBpiMessage.command';
+import { PublicKeyType } from '../../../identity/bpiSubjects/models/publicKey';
 
 @CommandHandler(CreateBpiMessageCommand)
 export class CreateBpiMessageCommandHandler
@@ -30,7 +31,9 @@ export class CreateBpiMessageCommandHandler
     this.authAgent.throwIfSignatureVerificationFails(
       command.content,
       command.signature,
-      fromBpiSubject.publicKey,
+      fromBpiSubject.publicKeys.filter(
+        (key) => key.type == PublicKeyType.ECDSA,
+      )[0].value,
     );
 
     const newBpiMessageCandidate = this.agent.createNewBpiMessage(
@@ -47,7 +50,9 @@ export class CreateBpiMessageCommandHandler
     );
 
     await this.messagingAgent.publishMessage(
-      toBpiSubject.publicKey,
+      toBpiSubject.publicKeys.filter(
+        (key) => key.type == PublicKeyType.ECDSA,
+      )[0].value,
       this.messagingAgent.serializeBpiMessage(newBpiMessage),
     );
 

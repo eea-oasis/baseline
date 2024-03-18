@@ -7,8 +7,6 @@ import {
 import { Transaction } from '../models/transaction';
 import { TransactionStatus } from '../models/transactionStatus.enum';
 
-import MerkleTree from 'merkletreejs';
-import { Witness } from 'src/bri/zeroKnowledgeProof/models/witness';
 import { AuthAgent } from '../../auth/agent/auth.agent';
 import { BpiSubjectAccount } from '../../identity/bpiSubjectAccounts/models/bpiSubjectAccount';
 import { MerkleTreeService } from '../../merkleTree/services/merkleTree.service';
@@ -23,6 +21,7 @@ import {
 } from '../api/err.messages';
 import { TransactionStorageAgent } from './transactionStorage.agent';
 import { TransactionResult } from '../models/transactionResult';
+import { PublicKeyType } from '../../identity/bpiSubjects/models/publicKey';
 
 @Injectable()
 export class TransactionAgent {
@@ -154,11 +153,14 @@ export class TransactionAgent {
       return false;
     }
 
-    const isSignatureValid = this.authAgent.verifySignatureAgainstPublicKey(
-      tx.payload,
-      tx.signature,
-      tx.fromBpiSubjectAccount.ownerBpiSubject.publicKey,
-    );
+    const isSignatureValid =
+      this.authAgent.verifyEddsaSignatureAgainstPublicKey(
+        tx.payload,
+        tx.signature,
+        tx.fromBpiSubjectAccount.ownerBpiSubject.publicKeys.filter(
+          (key) => key.type == PublicKeyType.EDDSA,
+        )[0].value,
+      );
 
     if (!isSignatureValid) {
       return false;

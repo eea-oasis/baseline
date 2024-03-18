@@ -4,6 +4,7 @@ import { BpiMessageAgent } from '../../agents/bpiMessages.agent';
 import { BpiMessageStorageAgent } from '../../agents/bpiMessagesStorage.agent';
 import { MessagingAgent } from '../../agents/messaging.agent';
 import { ProcessInboundBpiMessageCommand } from './processInboundMessage.command';
+import { PublicKeyType } from '../../../identity/bpiSubjects/models/publicKey';
 
 // Difference between this and the create bpi message command handler is that this one does not
 // stop the execution flow by throwing a nestjs exception (which results in 404 response in the other handler)
@@ -31,11 +32,14 @@ export class ProcessInboundMessageCommandHandler
       return false;
     }
 
-    const isSignatureValid = this.authAgent.verifySignatureAgainstPublicKey(
-      command.content,
-      command.signature,
-      fromBpiSubject.publicKey,
-    );
+    const isSignatureValid =
+      this.authAgent.verifyEddsaSignatureAgainstPublicKey(
+        command.content,
+        command.signature,
+        fromBpiSubject.publicKeys.filter(
+          (key) => key.type == PublicKeyType.EDDSA,
+        )[0].value,
+      );
 
     if (!isSignatureValid) {
       return false;
@@ -55,7 +59,9 @@ export class ProcessInboundMessageCommandHandler
     );
 
     await this.messagingAgent.publishMessage(
-      toBpiSubject.publicKey,
+      toBpiSubject.publicKeys.filter(
+        (key) => key.type == PublicKeyType.ECDSA,
+      )[0].value,
       this.messagingAgent.serializeBpiMessage(newBpiMessage),
     );
 
